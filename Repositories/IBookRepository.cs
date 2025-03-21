@@ -9,6 +9,6 @@ namespace Library.Repositories
         IEnumerable<Book> SearchByName(string name);
         bool Available(bool available, int id);
         Book? GetById(int id);
-        Book Delete(int id);
+        Book? Delete(int id);
     }
 }

@@ -1,15 +1,15 @@
 ﻿using Library.Models.DTOs;
-using Library.Models.Entities;
+using Library.Models.Responses;
 
 namespace Library.Services
 {
     public interface IBookServices
     {
-        IEnumerable<BookDTO> GetAll();
-        BookDTO Add(CreateBookDTO book);
-        IEnumerable<BookDTO> SearchByName(string name);
-        string Available(bool available, int id);
-        BookDTO GetById(int id);
-        BookDTO Delete(int id);
+        ServiceResponse<IEnumerable<BookDTO>> GetAll();
+        ServiceResponse<BookDTO> GetById(int id);
+        ServiceResponse<IEnumerable<BookDTO>> SearchByName(string name);
+        ServiceResponse<BookDTO> Add(CreateBookDTO book);
+        ServiceResponse<bool> Available(bool available, int id);
+        ServiceResponse<BookDTO> Delete(int id);
     }
 }

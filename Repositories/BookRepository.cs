@@ -44,15 +44,16 @@ namespace Library.Repositories
             return book.Available;
         }
 
-        public Book Delete(int id)
+        public Book? Delete(int id)
         {
             var bookToDelete = _libraryContext.Books.Find(id);
-            if (bookToDelete == null)
-                throw new KeyNotFoundException($"Book with id {id} was not found");
-            var deletedBook = _libraryContext.Books.Remove(bookToDelete);
-            SaveChange();
-
-            return deletedBook.Entity;
+            if(bookToDelete != null)
+            {
+                var deletedBook = _libraryContext.Books.Remove(bookToDelete);
+                SaveChange();
+                return deletedBook.Entity;
+            }
+            return bookToDelete;
         }
     }
 }

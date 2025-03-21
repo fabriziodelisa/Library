@@ -18,94 +18,82 @@ namespace Library.Controllers
         [Route("GetAll")]
         public IActionResult GetAll()
         {
-            var allBooks = _bookServices.GetAll();
-            return Ok(allBooks);
+            var response = _bookServices.GetAll();
+            if (response.Success)
+                return Ok(response);
+            else
+                return StatusCode(500, response);
         }
 
         [HttpGet]
         [Route("GetById/{id}", Name = "GetById")]
         public IActionResult GetById(int id)
         {
-            try
+            var response = _bookServices.GetById(id);
+
+            if (!response.Success)
             {
-                var book = _bookServices.GetById(id);
-                return Ok(book);
+                    return NotFound(response);
             }
-            catch (KeyNotFoundException ex)
-            {
-               return NotFound(ex.Message);
-            }           
+
+            return Ok(response);
         }
 
         [HttpGet]
         [Route("SearchByName")]
-        public IActionResult SearhByName([FromQuery]string name)
+        public IActionResult SearchByName([FromQuery]string name)
         {
-            try
-            {
-                var books = _bookServices.SearchByName(name);
-                return Ok(books);
-            }
-            catch (Exception ex)
-            {
+            var response = _bookServices.SearchByName(name);
 
-                return NotFound(ex.Message);
+            if(!response.Success)
+            {
+                return NotFound(response);
             }
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("Create")]
         public IActionResult Add(CreateBookDTO book)
         {
-            try
-            {
-                var addedBook = _bookServices.Add(book);
+            var response = _bookServices.Add(book);
 
+            if (response.Success)
+            {
                 return CreatedAtRoute(
                     routeName: "GetById",
-                    routeValues: new { id = addedBook.Id },
-                    value: addedBook
-                );
+                    routeValues: new { id = response.Data.Id },
+                    value: response
+                );              
             }
-            catch (Exception ex)
+            else
             {
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
 
         [HttpPut]
-        [Route("Available")]
-        public IActionResult Available(bool available, int id)
+        [Route("{id}/Available")]
+        public IActionResult Available([FromQuery]bool available, int id)
         {
-            try
+            var response = _bookServices.Available(available, id);
+            if (!response.Success)
             {
-                var result = _bookServices.Available(available, id);
-                return Ok(result);
+                return NotFound(response);
             }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            return Ok(response);
         }
 
         [HttpDelete]
-        [Route("Delete")]
+        [Route("{id}")]
         public IActionResult Delete(int id)
         {
-            try
+            var response = _bookServices.Delete(id);
+            if (!response.Success)
             {
-                var deletedBook = _bookServices.Delete(id);
-                return Ok($"{deletedBook.Title} was delete successfully.");
+                return NotFound(response);
             }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
+            return Ok(response);            
         }
     }
 }
