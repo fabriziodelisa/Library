@@ -20,6 +20,7 @@ namespace Library.Services
         public ServiceResponse<IEnumerable<BookDTO>> GetAll()
         {
             var response = new ServiceResponse<IEnumerable<BookDTO>>();
+
             try
             {
                 var allBooks = _bookRepository.GetAll();

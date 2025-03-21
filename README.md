@@ -1,1 +1,1 @@
-Recreacion de una API para manejo de libros en una biblioteca.
+Recreacion de una API Rest para manejo de libros en una biblioteca.
